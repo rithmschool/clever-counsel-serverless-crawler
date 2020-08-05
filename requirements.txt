@@ -1,8 +1,9 @@
 attrs==19.3.0
 awscli==1.18.111
-botocore==1.17.34
+boto3==1.14.36
+botocore==1.17.36
 chalice==1.16.0
-chromedriver-binary==85.0.4183.38.0
+chromedriver-binary==83.0.4103.39.0
 click==7.1.2
 colorama==0.4.3
 docutils==0.15.2

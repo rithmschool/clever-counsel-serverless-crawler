@@ -73,6 +73,12 @@ def capture_sos(entity_number, intake_id):
     - clicks link to go to entity page
     - saves screenshot of entity page
     """
+    # make sure that you do error handling for entity_number, intake_id
+    # error produced currently:
+    # {
+    #     "Code": "InternalServerError",
+    #     "Message": "An internal server error occurred."
+    # }
 
     # settings
     file_name = f"{timestamp()}_sos.png"
