@@ -8,6 +8,7 @@ def capture_sos():
     """ Runs sos webcapture fxns with Selenium/Chromedriver """
     return {'capture': 'sos'}
 
+
 @app.route('/locality')
 def capture_locality():
     """ Runs locality webcapture fxn  with Selenium/Chromedriver """
