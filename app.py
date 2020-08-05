@@ -3,9 +3,15 @@ from chalice import Chalice
 app = Chalice(app_name='clever-counsel-lambda')
 
 
-@app.route('/')
-def index():
-    return {'hello': 'world'}
+@app.route('/sos')
+def capture_sos():
+    """ Runs sos webcapture fxns with Selenium/Chromedriver """
+    return {'capture': 'sos'}
+
+@app.route('/locality')
+def capture_locality():
+    """ Runs locality webcapture fxn  with Selenium/Chromedriver """
+    return {'capture': 'locality'}
 
 
 # The view function above will return {"hello": "world"}
