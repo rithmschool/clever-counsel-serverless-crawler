@@ -5,6 +5,7 @@ S3_BUCKET = "clevercounseldevelopment"
 
 s3_client = boto3.client("s3")
 
+
 def upload_object(data, key):
     """
     uploads file-like object
