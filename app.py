@@ -1,5 +1,5 @@
 from chalice import Chalice
-from web_capture import capture_sos
+from web_capture import capture_sos, capture_locality
 
 app = Chalice(app_name="clever-counsel-lambda")
 
@@ -21,15 +21,27 @@ def take_sos_screenshot():
     print(resp)
     if resp.get("success"):
         # let the main API know that you"ve completed the task
-        return {"capture": "success"}
+        return {"data": resp, "status": 200}
     # else, you failed somehow
-    return {"capture": "failure"}
+    return {"status": 400}
 
 
 @app.route("/locality")
-def capture_locality():
+def get_locality():
     """ Runs locality webcapture fxn  with Selenium/Chromedriver """
-    return {"capture": "locality"}
+    
+    data = app.current_request.json_body
+    print(data)
+    resp = capture_locality(**data)
+    print(resp)
+
+    # TODO: add error handling
+    return {"data": resp, "status": 200}
+
+@app.route("/test")
+def test():
+    """ Runs locality webcapture fxn  with Selenium/Chromedriver """
+    return {"hello": "friend"}
 
 
 # @app.route("/screenshot")
