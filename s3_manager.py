@@ -1,9 +1,11 @@
 import io
+import os
 import boto3
 
-S3_BUCKET = "clevercounseldevelopment"
+S3_BUCKET = os.environ.get("S3_BUCKET", "clevercounseldevelopment")
 
 s3_client = boto3.client("s3")
+
 
 def upload_object(data, key):
     """
