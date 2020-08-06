@@ -3,11 +3,9 @@ from web_capture import capture_sos, capture_locality
 
 app = Chalice(app_name="clever-counsel-lambda")
 
-# change this into a post eventually
 
-
-@app.route("/sos")
-def take_sos_screenshot():
+@app.route("/sos", methods=["POST"])
+def add_sos_screenshot():
     """ Runs sos webcapture fxns with Selenium/Chromedriver 
         current_request: {
             entity_number, # CA SOS entity number
@@ -25,8 +23,8 @@ def take_sos_screenshot():
     return {"status": 400}
 
 
-@app.route("/locality")
-def get_locality():
+@app.route("/locality", methods=["POST"])
+def add_locality():
     """ Runs locality webcapture fxn  with Selenium/Chromedriver """
 
     data = app.current_request.json_body
@@ -34,9 +32,3 @@ def get_locality():
 
     # TODO: add error handling
     return {"data": resp, "status": 200}
-
-
-@app.route("/test")
-def test():
-    """ Simple test to see if lambda function works """
-    return {"hello": "friend"}

@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select, WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
-import chromedriver_binary # needs to be here, puts chromedriver in PATH
+import chromedriver_binary  # needs to be here, puts chromedriver in PATH
 
 # run selenium headless
 chrome_options = webdriver.ChromeOptions()
