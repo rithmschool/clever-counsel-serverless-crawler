@@ -34,6 +34,6 @@ def add_locality():
     # TODO: add error handling
     return {"data": resp, "status": 200}
 
-@app.route("/test", authorizer=authorizer)
-def test():
-    return {"foo": "bar"}
+@app.route("/app", authorizer=authorizer)
+def meta_information():
+    return {"description": "Clever Counsel serverless crawler"}
