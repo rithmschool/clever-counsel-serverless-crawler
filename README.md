@@ -15,12 +15,11 @@ This is a small microservice intended to be used along with Clever Counsel. Esse
 1.  Create a venv and install all the requirements
 ```python
 # install Python dependencies
-cd api
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 ```
-2. Use `aws configure` after npm installing awscli globally OR do the following:
+2. Add AWS keys
 ```
 $ mkdir ~/.aws
 $ cat >> ~/.aws/config
