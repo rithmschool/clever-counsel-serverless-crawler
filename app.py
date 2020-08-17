@@ -1,5 +1,5 @@
 from chalice import Chalice, IAMAuthorizer
-from web_capture import capture_sos, capture_locality
+from chalicelib.web_capture import capture_sos, capture_locality
 
 app = Chalice(app_name="clever-counsel-lambda")
 authorizer = IAMAuthorizer()

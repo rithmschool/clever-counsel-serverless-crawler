@@ -1,6 +1,6 @@
 from selenium import webdriver
 from datetime import datetime
-from s3_manager import upload_object
+from chalicelib.s3_manager import upload_object
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select, WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
