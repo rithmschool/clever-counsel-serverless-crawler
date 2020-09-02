@@ -1,10 +1,11 @@
-from chalice import Chalice
-from web_capture import capture_sos, capture_locality
+from chalice import Chalice, IAMAuthorizer
+from chalicelib.web_capture import capture_sos, capture_locality
 
 app = Chalice(app_name="clever-counsel-lambda")
+authorizer = IAMAuthorizer()
 
 
-@app.route("/sos", methods=["POST"])
+@app.route("/sos", methods=["POST"], authorizer=authorizer)
 def add_sos_screenshot():
     """ Runs sos webcapture fxns with Selenium/Chromedriver 
         current_request: {
@@ -23,7 +24,7 @@ def add_sos_screenshot():
     return {"status": 400}
 
 
-@app.route("/locality", methods=["POST"])
+@app.route("/locality", methods=["POST"], authorizer=authorizer)
 def add_locality():
     """ Runs locality webcapture fxn  with Selenium/Chromedriver """
 
