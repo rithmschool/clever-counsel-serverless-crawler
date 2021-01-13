@@ -5,7 +5,7 @@ botocore==1.17.43
 certifi==2020.12.5
 chalice==1.16.0
 chardet==4.0.0
-chromedriver-binary==83.0.4103.39.0
+chromedriver-binary==88.0.4324.27.1
 click==7.1.2
 colorama==0.4.3
 configparser==5.0.1
@@ -24,4 +24,3 @@ s3transfer==0.3.3
 selenium==3.141.0
 six==1.15.0
 urllib3==1.25.10
-webdriver-manager==3.2.2

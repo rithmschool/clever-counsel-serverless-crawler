@@ -1,5 +1,4 @@
 from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
 from datetime import datetime
 from chalicelib.s3_manager import upload_object
 from selenium.webdriver.common.by import By
@@ -87,7 +86,7 @@ def capture_sos(entity_number, intake_id):
     base_url = "https://businesssearch.sos.ca.gov/CBS/SearchResults"
     query = f"?filing=&SearchType=NUMBER&SearchCriteria={entity_number}"
 
-    driver = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_options)
+    driver = webdriver.Chrome(options=chrome_options)
     driver.get(f"{base_url}{query}")
 
     output = {}
@@ -166,7 +165,7 @@ def capture_locality(home_number, street_name, zip_code, intake_id):
     back_button_id = "btnBack"
 
     # create driver, get url
-    driver = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_options)
+    driver = webdriver.Chrome(options=chrome_options)
     driver.get("https://lavote.net/apps/PrecinctsMaps/")
 
     output = {}
