@@ -33,3 +33,7 @@ def add_locality():
 
     # TODO: add error handling
     return {"data": resp, "status": 200}
+
+@app.route("/test")
+def test():
+    return "hello"
