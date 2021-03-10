@@ -1,4 +1,7 @@
 .env
+.DS_Store
+
+vendor/
 venv/
 .chalice/
 __pycache__
