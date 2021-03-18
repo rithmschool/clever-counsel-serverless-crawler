@@ -3,5 +3,7 @@
 
 vendor/
 venv/
-.chalice/
+.chalice/*
 __pycache__
+
+!.chalice/config.json
