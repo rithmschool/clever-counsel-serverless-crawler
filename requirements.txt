@@ -11,6 +11,7 @@ colorama==0.4.3
 configparser==5.0.1
 crayons==0.4.0
 docutils==0.15.2
+dotenv-python==0.0.1
 enum-compat==0.0.3
 idna==2.10
 jmespath==0.10.0
