@@ -1,14 +1,15 @@
 {
   "version": "2.0",
   "app_name": "clever-counsel-lambda",
-  "environment_variables": {
-    "AWS_PROFILE": "lambda_selenium"
-  },
   "api_gateway_stage": "api",
   "lambda_timeout": 180,
   "lambda_memory_size": 1024,
   "stages": {
-    "dev": {},
+    "dev": {
+      "environment_variables": {
+        "AWS_PROFILE": "lambda_selenium"
+      }
+    },
     "prod": {
       "environment_variables": {
         "PATH": "/usr/local/bin:/usr/bin/:/bin:/opt/bin:/var/task",
