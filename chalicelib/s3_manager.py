@@ -1,9 +1,10 @@
 import io
 import os
 import boto3
+from dotenv import load_dotenv
+load_dotenv()
 
-S3_BUCKET = os.environ.get("S3_BUCKET", "clevercounseldevelopment")
-
+S3_BUCKET = os.environ.get("S3_BUCKET")
 s3_client = boto3.client("s3")
 
 

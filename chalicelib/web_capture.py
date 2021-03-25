@@ -1,5 +1,4 @@
 from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
 from datetime import datetime
 from chalicelib.s3_manager import upload_object
 from selenium.webdriver.common.by import By
@@ -19,21 +18,21 @@ def timestamp():
     return datetime.today().strftime("%Y_%m_%d_%H%M%S")
 
 
-def take_screenshot(driver, file_name, intake_id):
+def take_screenshot(driver, file_name, s3_directory):
     """
     take_screenshot()
 
     expects:
     - driver - reference to driver
     - file_name
-    - intake_id
+    - s3_directory
 
     take_screenshot then:
     - sets size of view window to full scrollWidth and scrollHeight
     of document body element
     - takes screenshot of document body element
     """
-    file_path = f"intakes/{intake_id}/{file_name}"
+    file_path = f"{s3_directory}/{file_name}"
 
     original_size = driver.get_window_size()
 
@@ -54,13 +53,13 @@ def take_screenshot(driver, file_name, intake_id):
     return file_path
 
 
-def capture_sos(entity_number, intake_id):
+def capture_sos(entity_number, s3_directory):
     """
     capture_sos()
 
     expects: 
     - entity_number (CXXXXXXX)
-    - intake_id
+    - s3_directory
 
     returns:
     - {address, success}
@@ -70,7 +69,7 @@ def capture_sos(entity_number, intake_id):
     - clicks link to go to entity page
     - saves screenshot of entity page
     """
-    # make sure that you do error handling for entity_number, intake_id
+    # make sure that you do error handling for entity_number, s3_directory
     # error produced currently:
     # {
     #     "Code": "InternalServerError",
@@ -87,7 +86,7 @@ def capture_sos(entity_number, intake_id):
     base_url = "https://businesssearch.sos.ca.gov/CBS/SearchResults"
     query = f"?filing=&SearchType=NUMBER&SearchCriteria={entity_number}"
 
-    driver = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_options)
+    driver = webdriver.Chrome(options=chrome_options)
     driver.get(f"{base_url}{query}")
 
     output = {}
@@ -101,7 +100,7 @@ def capture_sos(entity_number, intake_id):
 
         output["address"] = address.text.strip().replace("\n", ", ")
 
-        output["file_path"] = take_screenshot(driver, file_name, intake_id)
+        output["file_path"] = take_screenshot(driver, file_name, s3_directory)
         output["file_name"] = file_name
 
     except TimeoutException:
@@ -118,7 +117,7 @@ def capture_sos(entity_number, intake_id):
         return output
 
 
-def capture_locality(home_number, street_name, zip_code, intake_id):
+def capture_locality(home_number, street_name, zip_code, s3_directory):
     """
     capture_locality()
 
@@ -127,7 +126,7 @@ def capture_locality(home_number, street_name, zip_code, intake_id):
     - street_name 
         => won't work with direction (NESW) or street type (ave, st, blvd, etc)
     - zip_code
-    - intake_id
+    - s3_directory
 
     returns:
     - data => [{address, locality, screenshot}, ...]
@@ -166,7 +165,7 @@ def capture_locality(home_number, street_name, zip_code, intake_id):
     back_button_id = "btnBack"
 
     # create driver, get url
-    driver = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_options)
+    driver = webdriver.Chrome(options=chrome_options)
     driver.get("https://lavote.net/apps/PrecinctsMaps/")
 
     output = {}
@@ -223,7 +222,7 @@ def capture_locality(home_number, street_name, zip_code, intake_id):
                 raise TimeoutException
             else:
                 current_file_path = take_screenshot(
-                    driver, current_file_name, intake_id
+                    driver, current_file_name, s3_directory
                 )
                 counter += 1
 

@@ -10,7 +10,7 @@ def add_sos_screenshot():
     """ Runs sos webcapture fxns with Selenium/Chromedriver 
         current_request: {
             entity_number, # CA SOS entity number
-            intake_id 
+            s3_directory 
         }
     """
     data = app.current_request.json_body
@@ -32,4 +32,9 @@ def add_locality():
     resp = capture_locality(**data)
 
     # TODO: add error handling
-    return {"data": resp, "status": 200}
+    return {"data": resp["data"], "status": 200}
+
+
+@app.route("/test")
+def test():
+    return "hello"
