@@ -5,12 +5,63 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select, WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
-import chromedriver_binary  # needs to be here, puts chromedriver in PATH
+from botocore.exceptions import ClientError
+import os
 
-# run selenium headless
+# config settings taken from
+# https://github.com/vittorio-nardone/selenium-chromium-lambda/blob/master/src/webdriver_screenshot.py
 chrome_options = webdriver.ChromeOptions()
-chrome_options.add_argument("--headless")
-chrome_options.add_argument("--no-sandbox")
+lambda_options = lambda_options = [
+    '--autoplay-policy=user-gesture-required',
+    '--disable-background-networking',
+    '--disable-background-timer-throttling',
+    '--disable-backgrounding-occluded-windows',
+    '--disable-breakpad',
+    '--disable-client-side-phishing-detection',
+    '--disable-component-update',
+    '--disable-default-apps',
+    '--disable-dev-shm-usage',
+    '--disable-domain-reliability',
+    '--disable-extensions',
+    '--disable-features=AudioServiceOutOfProcess',
+    '--disable-hang-monitor',
+    '--disable-ipc-flooding-protection',
+    '--disable-notifications',
+    '--disable-offer-store-unmasked-wallet-cards',
+    '--disable-popup-blocking',
+    '--disable-print-preview',
+    '--disable-prompt-on-repost',
+    '--disable-renderer-backgrounding',
+    '--disable-setuid-sandbox',
+    '--disable-speech-api',
+    '--disable-sync',
+    '--disk-cache-size=33554432',
+    '--hide-scrollbars',
+    '--ignore-gpu-blacklist',
+    '--ignore-certificate-errors',
+    '--metrics-recording-only',
+    '--mute-audio',
+    '--no-default-browser-check',
+    '--no-first-run',
+    '--no-pings',
+    '--no-sandbox',
+    '--no-zygote',
+    '--password-store=basic',
+    '--use-gl=swiftshader',
+    '--use-mock-keychain',
+    '--single-process',
+    '--headless',
+    '--user-data-dir=/tmp/user-data',
+    '--data-path=/tmp/data-path',
+    '--homedir=/tmp',
+    '--disk-cache-dir=/tmp/cache-dir'
+]
+
+for argument in lambda_options:
+    chrome_options.add_argument(argument)
+
+if os.environ.get("CHALICE_ENV") == "production":
+    chrome_options.binary_location = '/opt/bin/chromium'
 
 
 def timestamp():
@@ -33,9 +84,6 @@ def take_screenshot(driver, file_name, s3_directory):
     - takes screenshot of document body element
     """
     file_path = f"{s3_directory}/{file_name}"
-
-    original_size = driver.get_window_size()
-
     full_width = driver.execute_script("return document.body.scrollWidth")
     full_height = driver.execute_script("return document.body.scrollHeight")
 
@@ -47,8 +95,6 @@ def take_screenshot(driver, file_name, s3_directory):
     # gets screenshot as binary
     screenshot = driver.get_screenshot_as_png()
     upload_object(screenshot, file_path)
-
-    driver.set_window_size(original_size["width"], original_size["height"])
 
     return file_path
 
@@ -86,7 +132,7 @@ def capture_sos(entity_number, s3_directory):
     base_url = "https://businesssearch.sos.ca.gov/CBS/SearchResults"
     query = f"?filing=&SearchType=NUMBER&SearchCriteria={entity_number}"
 
-    driver = webdriver.Chrome(options=chrome_options)
+    driver = webdriver.Chrome(options=chrome_options, executable_path=os.environ.get("EXECUTABLE_PATH"))
     driver.get(f"{base_url}{query}")
 
     output = {}
@@ -109,12 +155,14 @@ def capture_sos(entity_number, s3_directory):
     except NoSuchElementException:
         output["error"] = "One or more form elements could not be found"
 
-    finally:
-        if not output.get("error"):
-            output["success"] = f"Captured screenshot {file_name}"
+    except ClientError:
+        output["error"] = "Could not upload screenshot to S3"
 
-        driver.quit()
-        return output
+    if not output.get("error"):
+        output["success"] = f"Captured screenshot {file_name}"
+
+    driver.quit()
+    return output
 
 
 def capture_locality(home_number, street_name, zip_code, s3_directory):
@@ -165,7 +213,7 @@ def capture_locality(home_number, street_name, zip_code, s3_directory):
     back_button_id = "btnBack"
 
     # create driver, get url
-    driver = webdriver.Chrome(options=chrome_options)
+    driver = webdriver.Chrome(options=chrome_options, executable_path=os.environ.get("EXECUTABLE_PATH"))
     driver.get("https://lavote.net/apps/PrecinctsMaps/")
 
     output = {}
