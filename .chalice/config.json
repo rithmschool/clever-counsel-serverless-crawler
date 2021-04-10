@@ -7,15 +7,16 @@
   "stages": {
     "dev": {
       "environment_variables": {
-        "AWS_PROFILE": "lambda_selenium"
+        "AWS_PROFILE": "lambda_selenium",
+        "EXECUTABLE_PATH": "chromedriver",
+        "CHALICE_ENV": "development"
       }
     },
     "prod": {
       "environment_variables": {
-        "PATH": "/usr/local/bin:/usr/bin/:/bin:/opt/bin:/var/task",
-        "PYTHONPATH": "/usr/local/bin:/usr/bin/:/bin:/opt/bin:/var/task"
+        "EXECUTABLE_PATH": "/opt/bin/chromedriver",
+        "CHALICE_ENV": "production"
       }
     }
-  },
-  "automatic_layer": true
+  }
 }
