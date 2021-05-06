@@ -132,7 +132,7 @@ $ cat >> ~/.aws/config
 Once in your config file, add the following to the bottom of the file: 
 
 ```
-[lambda_selenium]
+[profile lambda_selenium]
 aws_access_key_id=YOUR_ACCESS_KEY_HERE
 aws_secret_access_key=YOUR_SECRET_ACCESS_KEY
 region=YOUR_BUCKET_REGION (such as us-west-2, us-west-1, etc)
