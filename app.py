@@ -30,8 +30,9 @@ def add_locality():
 
     data = app.current_request.json_body
     resp = capture_locality(**data)
+    if not resp:
+        return {"error": "locality of business not found", "status": 500}
 
-    # TODO: add error handling
     return {"data": resp["data"], "status": 200}
 
 
